@@ -8,7 +8,7 @@ public class BaseCardDiscountStrategy implements IDiscountStrategy{
 
     @Override
     public void discount(ProductPosition productPosition) {
-        if (!productPosition.canDiscount()) {
+        if (productPosition.getProduct().getDiscount() == 0) {
             productPosition.getProduct().discount(DISCOUNT_PERCENT);
         }
     }

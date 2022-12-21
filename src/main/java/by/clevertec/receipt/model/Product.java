@@ -1,7 +1,5 @@
 package by.clevertec.receipt.model;
 
-import by.clevertec.receipt.model.discountStrategy.IDiscountStrategy;
-
 import java.util.Objects;
 
 public class Product implements Cloneable {

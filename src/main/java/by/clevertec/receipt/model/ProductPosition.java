@@ -21,7 +21,7 @@ public class ProductPosition {
         this.count = Math.max(count, 1);
         totalPrice = product.getPrice()*count;
         if (product.getDiscount() != 0){
-            totalDiscount = product.getDiscount()*count;
+            totalDiscount = this.product.getDiscount()*count;
         }
     }
 
@@ -41,7 +41,9 @@ public class ProductPosition {
             this.discountStrategy = discountStrategy;
             discountStrategy.discount(this);
         }
-        totalDiscount = this.product.getDiscount()*count;
+        if (product.getDiscount() != 0){
+            totalDiscount = this.product.getDiscount()*count;
+        }
     }
 
     public Product getProduct() {
