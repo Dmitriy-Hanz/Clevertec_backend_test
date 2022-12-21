@@ -46,24 +46,24 @@ public class Receipt {
             receipt.time = LocalTime.now();
 
             receiptSB
-                    .append("\t\t\tCASH RECEIPT\n")
-                    .append("\t\t\t" + receipt.storeName + "\n")
-                    .append("\t\t" + receipt.address + "\n")
-                    .append("\t\t\tTel :" + receipt.phoneNumber + "\n")
+                    .append("\t\tCASH RECEIPT\n")
+                    .append("\t\t" + receipt.storeName + "\n")
+                    .append("\t" + receipt.address + "\n")
+                    .append("\t\tTel :" + receipt.phoneNumber + "\n")
                     .append("\n")
-                    .append("Cashier: №" + receipt.cashierNumber + "\t\t\t\tDate: " + receipt.date + "\n")
-                    .append("\t\t\t\t\t\t\tTime: " + receipt.time.format(DateTimeFormatter.ofPattern("hh:mm:ss")) + "\n")
+                    .append("Cashier: №" + receipt.cashierNumber + "\t\t   Date: " + receipt.date + "\n")
+                    .append("\t\t\t   Time: " + receipt.time.format(DateTimeFormatter.ofPattern("hh:mm:ss")) + "\n")
                     .append("--------------------------------------------\n")
-                    .append("QTY\tDESCRIPTION\t\t\t\tPRICE\tTOTAL\n")
+                    .append("QTY\tDESCRIPTION\t\tPRICE\tTOTAL\n")
                     .append("\n");
 
             if (receipt.card != null) {
                 receipt.card.discount(receipt.productPositions);
             }
             for (ProductPosition item : receipt.productPositions) {
-                receiptSB.append(item.getCount() + "\t" + item.getProduct().getName() + "\t\t\t\t" + item.getProduct().getPrice() + "\t" + String.format("%.2f", item.getTotalPrice()) + "\n");
+                receiptSB.append(item.getCount() + "\t" + item.getProduct().getName() + "\t\t" + item.getProduct().getPrice() + "\t" + String.format("%.2f", item.getTotalPrice()) + "\n");
                 if (item.getProduct().getDiscount() != 0) {
-                    receiptSB.append("\tDISCOUNT\t\t\t\t" + String.format("%.2f", item.getProduct().getDiscount()) + "\t" + String.format("%.2f", item.getTotalDiscount()) + "\n");
+                    receiptSB.append("\tDISCOUNT\t\t" + String.format("%.2f", item.getProduct().getDiscount()) + "\t" + String.format("%.2f", item.getTotalDiscount()) + "\n");
                     receiptSB.append("\t" + item.getProduct().getBarcode() + "\n");
                     receipt.totalDiscount += item.getTotalDiscount();
                 }
@@ -78,11 +78,11 @@ public class Receipt {
                     .append("============================================\n")
                     .append("\n");
             if (receipt.totalDiscount != 0) {
-                receiptSB.append("DISCOUNT TOT.\t\t\t\t\t\t" + String.format("%.2f", receipt.totalDiscount) + "\n");
+                receiptSB.append("DISCOUNT TOT.\t\t\t\t" + String.format("%.2f", receipt.totalDiscount) + "\n");
             }
-            receiptSB.append("TAXABLE TOT.\t\t\t\t\t\t" + String.format("%.2f",receipt.totalPrice) + "\n")
-                    .append("VAT17%\t\t\t\t\t\t\t\t" + String.format("%.2f",receipt.taxSum) + "\n")
-                    .append("TOTAL\t\t\t\t\t\t\t\t" + String.format("%.2f",receipt.taxedTotalPrice));
+            receiptSB.append("TAXABLE TOT.\t\t\t\t" + String.format("%.2f",receipt.totalPrice) + "\n")
+                    .append("VAT17%\t\t\t\t\t" + String.format("%.2f",receipt.taxSum) + "\n")
+                    .append("TOTAL\t\t\t\t\t" + String.format("%.2f",receipt.taxedTotalPrice));
 
             receipt.stringReceipt = receiptSB.toString();
             return receipt;
