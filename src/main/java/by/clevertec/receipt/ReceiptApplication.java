@@ -1,5 +1,6 @@
 package by.clevertec.receipt;
 
+import by.clevertec.receipt.ex.*;
 import by.clevertec.receipt.model.Card;
 import by.clevertec.receipt.model.Product;
 import by.clevertec.receipt.model.Receipt;
@@ -28,7 +29,7 @@ public class ReceiptApplication implements CommandLineRunner {
     @Override
     public void run(String... args){
         if (args.length == 0){
-            throw new RuntimeException("No args");
+            throw new NoArgsException("No args");
         }
 
         Set<Product> productCatalog = new HashSet<>();
@@ -55,7 +56,7 @@ public class ReceiptApplication implements CommandLineRunner {
 
         if (args[0].matches(FILE_PATTERN) || args[0].matches(FILEPATH_PATTERN)){
             if (userArgs.length > 1){
-                throw new RuntimeException("Wrong args format");
+                throw new WrongArgsFormatException("Wrong args format");
             }
             String filepath = args[0].split("-")[1];
             try (FileReader fr = new FileReader(filepath);BufferedReader bfr = new BufferedReader(fr)) {
@@ -74,8 +75,8 @@ public class ReceiptApplication implements CommandLineRunner {
             }
         }
 
-        if(!checkArgs(userArgs)){
-            throw new RuntimeException("Wrong args format");
+        if(!checkArgsFormat(userArgs)){
+            throw new WrongArgsFormatException("Wrong args format");
         }
 
         String[] UserArgument;
@@ -114,6 +115,18 @@ public class ReceiptApplication implements CommandLineRunner {
         receipt.printToFile("receipt.txt");
     }
 
+    public static boolean checkArgsFormat(String[] args) {
+        if (!args[args.length - 1].matches(PRODUCT_PATTERN) && !args[args.length - 1].matches(CARD_PATTERN)) {
+            return false;
+        }
+        for (int i = 0; i < args.length - 1; i++) {
+            if (!args[i].matches(PRODUCT_PATTERN)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void addProduct(List<Product> productList, Set<Product> productCatalog, long productBarcode){
         try {
             Product temp = productCatalog.stream()
@@ -124,10 +137,11 @@ public class ReceiptApplication implements CommandLineRunner {
             productList.add(temp.clone());
         }
         catch (NoSuchElementException ex){
-            System.out.println("There is no product with this barcode \"" + productBarcode + "\"");
+            throw new WrongBarcodeException("There is no product with this barcode \\\"\" + productBarcode + \"\\\"");
         }
         catch (CloneNotSupportedException ex){
             ex.printStackTrace();
+            throw new RuntimeException(ex.getMessage());
         }
     }
 
@@ -139,20 +153,7 @@ public class ReceiptApplication implements CommandLineRunner {
                     .orElseThrow();
         }
         catch (NoSuchElementException ex){
-            System.out.println("There is no card with this number \"" + cardNumber + "\"");
-            return null;
+            throw new WrongCardNumberException("There is no card with this number \\\"\" + cardNumber + \"\\\"");
         }
-    }
-
-    public static boolean checkArgs(String[] args) {
-        if (!args[args.length - 1].matches(PRODUCT_PATTERN) && !args[args.length - 1].matches(CARD_PATTERN)) {
-            return false;
-        }
-        for (int i = 0; i < args.length - 1; i++) {
-            if (!args[i].matches(PRODUCT_PATTERN)) {
-                return false;
-            }
-        }
-        return true;
     }
 }

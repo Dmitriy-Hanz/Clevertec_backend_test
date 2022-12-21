@@ -2,7 +2,6 @@ package by.clevertec.receipt.model;
 
 import by.clevertec.receipt.model.discountStrategy.IDiscountStrategy;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 

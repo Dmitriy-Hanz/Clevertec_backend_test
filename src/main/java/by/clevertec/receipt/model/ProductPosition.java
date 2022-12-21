@@ -19,7 +19,7 @@ public class ProductPosition {
             throw new RuntimeException(ex.getMessage());
         }
         this.count = Math.max(count, 1);
-        totalPrice = (double)Math.round((product.getPrice()*count) * 100)/100;
+        totalPrice = product.getPrice()*count;
         if (product.getDiscount() != 0){
             totalDiscount = product.getDiscount()*count;
         }

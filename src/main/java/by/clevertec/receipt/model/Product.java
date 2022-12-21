@@ -29,7 +29,7 @@ public class Product implements Cloneable {
         this.barcode = barcode;
         this.name = name;
         this.price = price;
-        this.discount = price * discountPercent / 100;
+        this.discount = Double.parseDouble(String.format("%.3f",price * discountPercent / 100).replace(',','.').replaceFirst(".$","") );
         isPromotional = true;
     }
 
@@ -54,7 +54,7 @@ public class Product implements Cloneable {
     }
 
     public void discount(int discountPercent) {
-        discount = price * (double)discountPercent / 100;
+        discount = Double.parseDouble(String.format("%.3f",price * (double)discountPercent / 100).replace(',','.').replaceFirst(".$","") );
         if (!isPromotional) {
             isPromotional = true;
         }
